@@ -6,10 +6,10 @@
 #define ODYSSEY_CRAQ_UTIL_H
 
 #include "cr_config.h"
-#include "network_context.h"
-#include "init_func.h"
+#include "od_network_context.h"
+#include "od_init_func.h"
 #include <cr_inline_util.h>
-#include "trace_util.h"
+#include "od_trace_util.h"
 
 void cr_stats(stats_ctx_t *ctx);
 

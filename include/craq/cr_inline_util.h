@@ -5,7 +5,7 @@
 #ifndef ODYSSEY_CR_INLINE_UTIL_H
 #define ODYSSEY_CR_INLINE_UTIL_H
 
-#include <netw_func.h>
+#include <od_netw_func.h>
 #include "cr_debug_util.h"
 #include "cr_kvs_util.h"
 #include "cr_generic_util.h"

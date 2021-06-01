@@ -6,9 +6,9 @@
 #define ODYSSEY_CR_CONFIG_H
 
 
-#include "fifo.h"
+#include "od_fifo.h"
 #include <cr_messages.h>
-#include <network_context.h>
+#include <od_network_context.h>
 
 
 #define CR_HEAD_NODE 0
