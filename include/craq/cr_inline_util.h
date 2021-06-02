@@ -19,8 +19,8 @@ static inline bool filter_remote_writes(context_t *ctx,
   uint8_t rm_id = get_key_owner(ctx, op->key);
   if (rm_id == ctx->m_id) return false;
   else {
-    ctx_insert_mes(ctx, PREP_QP_ID, sizeof(cr_prep_t), 1,
-                   false, op, CR_LOCAL_PREP, STEER_TO_HEAD_FIFO_ID);
+    od_insert_mes(ctx, PREP_QP_ID, sizeof(cr_prep_t), 1,
+                  false, op, CR_LOCAL_PREP, STEER_TO_HEAD_FIFO_ID);
   }
   return true;
 }
@@ -45,13 +45,13 @@ static inline uint16_t cr_find_trace_ops(context_t *ctx)
   /// main loop
   while (kvs_op_i < CR_TRACE_BATCH && !passed_over_all_sessions) {
 
-    ctx_fill_trace_op(ctx, &trace[cr_ctx->trace_iter], &ops[kvs_op_i], working_session);
+    od_fill_trace_op(ctx, &trace[cr_ctx->trace_iter], &ops[kvs_op_i], working_session);
     cr_ctx->stalled[working_session] = true;
     passed_over_all_sessions =
-      ctx_find_next_working_session(ctx, &working_session,
-                                    cr_ctx->stalled,
-                                    cr_ctx->last_session,
-                                    &cr_ctx->all_sessions_stalled);
+        od_find_next_working_session(ctx, &working_session,
+                                     cr_ctx->stalled,
+                                     cr_ctx->last_session,
+                                     &cr_ctx->all_sessions_stalled);
     if (!ENABLE_CLIENTS) {
       cr_ctx->trace_iter++;
       if (trace[cr_ctx->trace_iter].opcode == NOP) cr_ctx->trace_iter = 0;
@@ -586,7 +586,7 @@ static inline void cr_main_loop(context_t *ctx)
     ctx_poll_incoming_messages(ctx, PREP_QP_ID);
 
     //
-    ctx_send_acks(ctx, ACK_QP_ID);
+    od_send_acks(ctx, ACK_QP_ID);
 
     //
     ctx_poll_incoming_messages(ctx, ACK_QP_ID);

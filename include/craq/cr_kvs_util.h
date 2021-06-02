@@ -119,8 +119,8 @@ static inline void cr_loc_or_rem_write_or_prep(context_t *ctx,
     w_rob->kv_ptr = kv_ptr;
     w_rob->w_state = SEMIVALID;
 
-    ctx_insert_mes(ctx, PREP_QP_ID, sizeof(cr_prep_t), 1,
-                   false, source, source_flag, CHAIN_PREP_FIFO_ID);
+    od_insert_mes(ctx, PREP_QP_ID, sizeof(cr_prep_t), 1,
+                  false, source, source_flag, CHAIN_PREP_FIFO_ID);
   }
   //else printf("Reached Tail node \n");
 }
@@ -162,8 +162,8 @@ static inline void cr_loc_read(context_t *ctx,
   else {
     if (CR_REMOTE_READS) {
       ctx->ctx_tmp->counter = version;
-      ctx_insert_mes(ctx, R_QP_ID, sizeof(cr_read_t),
-                     (uint32_t) R_REP_BIG_SIZE, false, op, NOT_USED, 0);
+      od_insert_mes(ctx, R_QP_ID, sizeof(cr_read_t),
+                    (uint32_t) R_REP_BIG_SIZE, false, op, NOT_USED, 0);
     }
     else
       cr_insert_buffered_op(ctx, kv_ptr, op);
@@ -210,7 +210,7 @@ static inline void cr_KVS_batch_op_trace(context_t *ctx, uint16_t op_num)
 
 
   for(op_i = 0; op_i < op_num; op_i++) {
-    KVS_check_key(kv_ptr[op_i], op[op_i].key, op_i);
+    od_KVS_check_key(kv_ptr[op_i], op[op_i].key, op_i);
 
     if (op[op_i].opcode == KVS_OP_PUT) {
       cr_loc_or_rem_write_or_prep(ctx, kv_ptr[op_i], &op[op_i], CR_LOCAL_PREP);
@@ -250,7 +250,7 @@ static inline void cr_KVS_batch_op_preps(context_t *ctx)
   KVS_locate_all_kv_pairs(op_num, tag, bkt_ptr, kv_ptr, KVS);
 
   for(op_i = 0; op_i < op_num; op_i++) {
-    KVS_check_key(kv_ptr[op_i], preps[op_i]->key, op_i);
+    od_KVS_check_key(kv_ptr[op_i], preps[op_i]->key, op_i);
     cr_loc_or_rem_write_or_prep(ctx, kv_ptr[op_i], preps[op_i],
                                 is_head(ctx) ? STEERED_PREP : CHAIN_PREP);
   }
@@ -281,12 +281,12 @@ static inline void cr_KVS_batch_op_reads(context_t *ctx)
 
   for(op_i = 0; op_i < op_num; op_i++) {
     cr_read_t *read = ptrs_to_r->ops[op_i];
-    KVS_check_key(kv_ptr[op_i], read->key, op_i);
+    od_KVS_check_key(kv_ptr[op_i], read->key, op_i);
     if (ENABLE_ASSERTIONS) assert(read->opcode == KVS_OP_GET);
 
-    ctx_insert_mes(ctx, R_QP_ID, R_REP_SMALL_SIZE, 0,
-                   !ptrs_to_r->coalesce[op_i],
-                   (void *) kv_ptr[op_i], op_i, 0);
+    od_insert_mes(ctx, R_QP_ID, R_REP_SMALL_SIZE, 0,
+                  !ptrs_to_r->coalesce[op_i],
+                  (void *) kv_ptr[op_i], op_i, 0);
 
   }
 }
