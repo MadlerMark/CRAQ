@@ -37,8 +37,8 @@ static inline uint16_t cr_find_trace_ops(context_t *ctx)
   if (all_sessions_are_stalled(ctx, cr_ctx->all_sessions_stalled,
                                &cr_ctx->stalled_sessions_dbg_counter))
     return 0;
-  if (!find_starting_session(ctx, cr_ctx->last_session,
-                             cr_ctx->stalled, &working_session)) return 0;
+  if (!od_find_starting_session(ctx, cr_ctx->last_session,
+                                cr_ctx->stalled, &working_session)) return 0;
 
   bool passed_over_all_sessions = false;
 
